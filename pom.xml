@@ -28,31 +28,7 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <shadedClassifierName>with-dependencies</shadedClassifierName>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
 
     <repositories>
@@ -63,6 +39,11 @@
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
