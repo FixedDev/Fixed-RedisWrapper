@@ -56,7 +56,7 @@ public class SimpleRedis implements Redis {
         listenerConnection.close();
     }
 
-    static class SimpleRedisBuilder implements RedisBuilder {
+    static class SimpleRedisBuilder implements Builder {
         private Plugin plugin;
 
         private String serverId = UUID.randomUUID().toString();
@@ -70,7 +70,7 @@ public class SimpleRedis implements Redis {
         }
 
         @Override
-        public RedisBuilder serverId(String id) {
+        public Builder serverId(String id) {
             Preconditions.checkNotNull(id);
             this.serverId = id;
 
@@ -78,7 +78,7 @@ public class SimpleRedis implements Redis {
         }
 
         @Override
-        public RedisBuilder gson(Gson gson) {
+        public Builder gson(Gson gson) {
             Preconditions.checkNotNull(gson);
             this.gson = gson;
 
@@ -86,7 +86,7 @@ public class SimpleRedis implements Redis {
         }
 
         @Override
-        public RedisBuilder jedis(JedisPool pool, Jedis listenerConnection) {
+        public Builder jedis(JedisPool pool, Jedis listenerConnection) {
             Preconditions.checkNotNull(pool);
             Preconditions.checkNotNull(listenerConnection);
 
@@ -97,7 +97,7 @@ public class SimpleRedis implements Redis {
         }
 
         @Override
-        public RedisBuilder jedis(JedisBuilder builder) {
+        public Builder jedis(JedisBuilder builder) {
             Preconditions.checkNotNull(builder);
 
             JedisResult result = builder.build();

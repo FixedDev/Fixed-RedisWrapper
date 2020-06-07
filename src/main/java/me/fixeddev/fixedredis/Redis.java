@@ -15,18 +15,18 @@ public interface Redis extends Closeable {
 
     Jedis listenerConnection();
 
-    static RedisBuilder builder(Plugin plugin) {
+    static Builder builder(Plugin plugin) {
         return new SimpleRedis.SimpleRedisBuilder(plugin);
     }
 
-    interface RedisBuilder {
-        RedisBuilder serverId(String id);
+    interface Builder {
+        Builder serverId(String id);
 
-        RedisBuilder gson(Gson gson);
+        Builder gson(Gson gson);
 
-        RedisBuilder jedis(JedisPool connection, Jedis listenerConnection);
+        Builder jedis(JedisPool connection, Jedis listenerConnection);
 
-        RedisBuilder jedis(JedisBuilder builder);
+        Builder jedis(JedisBuilder builder);
 
         Redis build();
     }
