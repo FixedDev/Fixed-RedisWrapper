@@ -88,11 +88,11 @@ public class JedisBuilder {
         }
     }
 
-    static JedisBuilder builder() {
+    public static JedisBuilder builder() {
         return new JedisBuilder();
     }
 
-    static JedisBuilder fromConfig(ConfigurationSection section) {
+    public static JedisBuilder fromConfig(ConfigurationSection section) {
         return new JedisBuilder()
                 .setHost(section.getString("host", "localhost"))
                 .setPort(section.getInt("port", 6379))
