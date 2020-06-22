@@ -14,7 +14,6 @@ import redis.clients.jedis.JedisPubSub;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ForkJoinPool;
 
 public class RedisMessenger implements Messenger {
 
@@ -29,8 +28,6 @@ public class RedisMessenger implements Messenger {
 
     private JedisPubSub pubSub;
     private JsonParser parser = new JsonParser();
-
-    private boolean closed = false;
 
     public RedisMessenger(JedisPool jedisPool, Jedis listenerConnection, Plugin plugin, String serverId, Gson gson) {
         this.serverId = serverId;
@@ -66,16 +63,6 @@ public class RedisMessenger implements Messenger {
                 channelObject.callListeners(serverId, deserializeObject);
             }
         };
-
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                while (!closed) {
-                    listenerConnection.subscribe(pubSub,channels.keySet().toArray(new String[0]) );
-                }
-            }
-        }.runTaskAsynchronously(plugin);
     }
 
 
@@ -89,7 +76,7 @@ public class RedisMessenger implements Messenger {
 
             channels.put(name, channel);
 
-            register();
+            register(name);
         } else {
             if (!channel.type().equals(type)) {
                 throw new IllegalArgumentException("The channel " + name + " is already registered with the type " + type.toString());
@@ -99,22 +86,31 @@ public class RedisMessenger implements Messenger {
         return channel;
     }
 
-    private void register() {
-        if (pubSub != null) {
-            if(pubSub.isSubscribed()){
-                pubSub.unsubscribe();
-            }
+    private void register(String channel) {
+        if (pubSub == null) {
+            return;
+        }
+
+        if (pubSub.isSubscribed()) {
+            pubSub.subscribe(channel);
 
             return;
         }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                listenerConnection.subscribe(pubSub, channel);
+            }
+        }.runTaskAsynchronously(plugin);
+
     }
 
     @Override
     public void close() throws IOException {
-        closed = true;
         channels.clear();
 
-        if(pubSub.isSubscribed()){
+        if (pubSub.isSubscribed()) {
             pubSub.unsubscribe();
         }
     }
