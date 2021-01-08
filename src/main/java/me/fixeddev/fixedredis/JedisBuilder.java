@@ -74,17 +74,13 @@ public class JedisBuilder {
     }
 
     private void startRedis() {
-        try {
-            jedis = new Jedis(host, port, timeout);
+        jedis = new Jedis(host, port, timeout);
 
-            if (password == null || password.isEmpty()) {
-                this.jedisPool = new JedisPool(config, host, port, timeout);
-            } else {
-                this.jedisPool = new JedisPool(config, host, port, timeout, password);
-                jedis.auth(password);
-            }
-        } catch (JedisConnectionException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "[Redis] An exception occurred while initializing the needed jedis instances", e);
+        if (password == null || password.isEmpty()) {
+            this.jedisPool = new JedisPool(config, host, port, timeout);
+        } else {
+            this.jedisPool = new JedisPool(config, host, port, timeout, password);
+            jedis.auth(password);
         }
     }
 
