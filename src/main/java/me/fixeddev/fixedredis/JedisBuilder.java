@@ -9,7 +9,6 @@ import redis.clients.jedis.JedisPoolConfig;
 import java.util.logging.Logger;
 
 public class JedisBuilder {
-    private static final Logger LOGGER = Logger.getLogger(JedisBuilder.class.getName());
     private Jedis jedis;
     private JedisPool jedisPool;
 
