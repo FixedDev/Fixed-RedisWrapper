@@ -1,16 +1,15 @@
 package me.fixeddev.fixedredis;
 
 import com.google.common.base.Preconditions;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.exceptions.JedisConnectionException;
 
-import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JedisBuilder {
+    private static final Logger LOGGER = Logger.getLogger(JedisBuilder.class.getName());
     private Jedis jedis;
     private JedisPool jedisPool;
 
