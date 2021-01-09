@@ -5,8 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
@@ -18,7 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RedisMessenger implements Messenger {
 
     private String serverId;
-    private Plugin plugin;
     private Gson gson;
 
     private JedisPool messengerPool;
@@ -29,9 +26,8 @@ public class RedisMessenger implements Messenger {
     private JedisPubSub pubSub;
     private JsonParser parser = new JsonParser();
 
-    public RedisMessenger(JedisPool jedisPool, Jedis listenerConnection, Plugin plugin, String serverId, Gson gson) {
+    public RedisMessenger(JedisPool jedisPool, Jedis listenerConnection, String serverId, Gson gson) {
         this.serverId = serverId;
-        this.plugin = plugin;
         this.gson = gson;
 
         messengerPool = jedisPool;
@@ -97,12 +93,7 @@ public class RedisMessenger implements Messenger {
             return;
         }
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                listenerConnection.subscribe(pubSub, channel);
-            }
-        }.runTaskAsynchronously(plugin);
+        new Thread(() -> listenerConnection.subscribe(pubSub, channel)).start();
 
     }
 

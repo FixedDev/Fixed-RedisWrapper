@@ -2,7 +2,6 @@ package me.fixeddev.fixedredis;
 
 import com.google.gson.Gson;
 import me.fixeddev.fixedredis.messenger.Messenger;
-import org.bukkit.plugin.Plugin;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -15,8 +14,8 @@ public interface Redis extends Closeable {
 
     Jedis listenerConnection();
 
-    static Builder builder(Plugin plugin) {
-        return new SimpleRedis.SimpleRedisBuilder(plugin);
+    static Builder builder() {
+        return new SimpleRedis.SimpleRedisBuilder();
     }
 
     interface Builder {
